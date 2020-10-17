@@ -1,0 +1,91 @@
+class customer:
+    
+    def __init__(self, root):
+        self.root = root
+        self.root.title("eZ Billing System")
+        self.root.geometry("1350x750+0+0")
+        self.root.config(bg="cadet blue")
+        self.frame = Frame(self.root,bg='cadet blue')
+        self.frame.pack()
+        
+        CID = StringVar()
+        Product = StringVar()
+        Qty = StringVar()
+        Price = StringVar()
+        Dsc = StringVar()
+        Gst = StringVar()
+        Amt = StringVar()
+        
+        
+        #=================================================================Function=====================================================
+        
+        def iExit():
+            iExit = tkinter.messagebox.askyesno("eZ Billing System","Confirm Exit?")
+            if iExit > 0:
+                root.destroy()
+                return
+        
+        def clearData():
+            self.txtCID.delete(0,END)
+            self.txtProduct.delete(0,END)
+            self.txtQty.delete(0,END)
+            self.txtPrice.delete(0,END)
+            self.txtDsc.delete(0,END)
+            self.txtGst.delete(0,END)
+            self.txtAmt.delete(0,END)
+        
+        def addData():
+            if(len(CID.get())!=0):
+                cstDatabase_BackEnd.addCstRec(CID.get() ,Product.get() ,Qty.get(), Price.get(), Dsc.get(), Gst.get(),Amt.get())
+                customerlist.delete(0,END)
+                customerlist.insert(END,(CID.get() ,Product.get() ,Qty.get(), Price.get(), Dsc.get(), Gst.get(),
+                                    Amt.get()))
+        
+        def CustomerRec(event):
+            global sd
+            searchCST = customerlist.curselection()[0]
+            sd = customerlist.get(searchCST)
+            
+            self.txtCID.delete(0,END)
+            self.txtCID.insert(END,sd[1])
+            self.txtProduct.delete(0,END)
+            self.txtProduct.insert(END,sd[2])
+            self.txtQty.delete(0,END)
+            self.txtQty.insert(END,sd[3])
+            self.txtPrice.delete(0,END)
+            self.txtPrice.insert(END,sd[4])
+            self.txtDsc.delete(0,END)
+            self.txtDsc.insert(END,sd[5])
+            self.txtGst.delete(0,END)
+            self.txtGst.insert(END,sd[6])
+            self.txtAmt.delete(0,END)
+            self.txtAmt.insert(END,sd[7])
+            
+        def DisplayData():
+            customerlist.delete(0,END)
+            for row in cstDatabase_BackEnd.viewData():
+             customerlist.insert(END,row,str(""))
+            
+        def DeleteData():
+            if(len(CID.get())!=0):
+                cstDatabase_BackEnd.deleteRec(sd[0])
+                clearData()
+                DisplayData()
+        def update():
+            if(len(CID.get())!=0):
+                cstDatabase_BackEnd.deleteRec(sd[0])
+            if(len(CID.get())!=0):
+                cstDatabase_BackEnd.addCstRec(CID.get() ,Product.get() ,Qty.get(), Price.get(), Dsc.get(), Gst.get(),Amt.get())
+                customerlist.delete(0,END)
+                customerlist.insert(END,(CID.get() ,Product.get() ,Qty.get(), Price.get(), Dsc.get(), Gst.get(),\
+                                    Amt.get()))
+            
+        def calc():
+            self.txtAmt.delete(0,END)
+            q = int(Qty.get())
+            p = int(Price.get())
+            d = int(Dsc.get())
+            g = int(Gst.get())
+            f = ((q*p)-d)-g
+            self.txtAmt.insert(10,str(f))
+            
