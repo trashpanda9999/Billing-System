@@ -2,5 +2,5 @@
 
 This is an billing system made with python.
 
-###Contributors are welcome
+### Contributors are welcome
 read CONTIBUTING.md
